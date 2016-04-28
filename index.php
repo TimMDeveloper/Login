@@ -16,16 +16,6 @@ if(!session_start()) {
 require_once "config.php";
 require_once "includes.php";
 
-/**
-* Try to create a new PDO connection
-*/
-try {
-	$db = new PDO('mysql:dbname='.$config['database']['database'].';host=' . $config['database']['host'], $config['database']['username'], $config['database']['password']);
-}
-catch(PDOexception $e) {
-	echo 'Couldn\'t connect to the mysql server with details: <br />' . $e->getMessage(), 'Database connection error';
-}
-
 $error = "";
 if(isset($_GET['p']))
 {
