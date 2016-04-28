@@ -77,11 +77,25 @@ class User {
 	/**
 	 * Check wether the user is logged in or not
 	 * @return bool true|false. True: loggedin, false: not loggedin.
-	 * @todo Check the session in the database.
 	*/
-	public function loggedIn()
+	public static function loggedIn()
 	{
-		return isset($_SESSION['id']);
+		global $db;
+		if (isset($_SESSION['id']))
+		{
+			$sql = 'SELECT * FROM sessions WHERE session_id = :session_id AND ip = :ip';
+			var_dump($db);
+			$query = $db->prepare($sql);
+			$query->execute(array(
+				':session_id' => self::$fields['sessions_id'],
+				':ip' => self::$fields['ip_last']
+			));
+			if ($query->rowCount() == 1)
+				return true;
+			else
+				return false;
+		}
+		return false;
 	}
 
 	public function session($user_id = null)
