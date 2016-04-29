@@ -16,10 +16,10 @@
 	 		"database" => "login"
 	 ],
 	"site_name" => "LoginSystem",
-	"url" => "http://localhost:8080"
+	"url" => "http://localhost:8080/Login" // Url without /
  ];
  
- /**
+/**
 * Try to create a new PDO connection
 */
 try {

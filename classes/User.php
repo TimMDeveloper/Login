@@ -11,8 +11,7 @@
 class User {
 
 	/**
-	 * @var $fields
-	 * @return array
+	 * @var array $fields The array with the model's data
 	 */ 
 	private $fields = [];
 
@@ -23,14 +22,13 @@ class User {
 	public function __construct($id)
 	{
 		global $db;
-		$sql = "SELECT * FROM users WHERE id=:id";
-
-		$query = $db->prepare($sql);
-		$query->execute(array(
-			":id" => $id
-		)); 
-		foreach ($query->fetch() as $key => $value) {
-			$this->fields[$key] = $value;
+		$query = $db->prepare('SELECT * FROM users WHERE id=:id');
+		$query->execute(array(":id" => $id));
+		if ($query->rowCount() == 1)
+		{ 
+			foreach ($query->fetch() as $key => $value) {
+				$this->fields[$key] = $value;
+			}
 		}
 	}
 
@@ -41,7 +39,11 @@ class User {
 	 */ 
 	public function data($key)
 	{
-		return isset($this->fields[$key]);
+		if(isset($this->fields[$key])) 
+		{
+			return $this->fields[$key];
+		}
+		return false;
 	}
 	/**
 	 * Check the username
@@ -80,38 +82,23 @@ class User {
 	*/
 	public static function loggedIn()
 	{
-		global $db;
 		if (isset($_SESSION['id']))
 		{
-			$sql = 'SELECT * FROM sessions WHERE session_id = :session_id AND ip = :ip';
-			var_dump($db);
-			$query = $db->prepare($sql);
-			$query->execute(array(
-				':session_id' => self::$fields['sessions_id'],
-				':ip' => self::$fields['ip_last']
-			));
-			if ($query->rowCount() == 1)
-				return true;
-			else
-				return false;
+			return true;
 		}
 		return false;
 	}
 
-	public function session($user_id = null)
+	/**
+	 * Delete current session id. The user will be logout.
+	 */ 
+	public function logout()
 	{
-		global $db;
-		$session_id = sha1(uniqid(mt_rand(), true));
-		$sql = 'INSERT INTO sessions (user_id, session_id, time, ip) VALUES (:user_id, :session_id, :time, :ip)';
-		$query = $db->prepare($sql);
-		$query->execute(array(
-			':user_id' => $user_id,
-			':session_id' => $session_id,
-			':time' => strtotime("now"),
-			':ip' => getIP()
-		));
-		$sqlUsers = 'UPDATE users SET session_id = :session_id WHERE id = :id';
-		$updateQuery = $db->prepare($sqlUsers);
-		$updateQuery->execute(array(':id' => $user_id, ':session_id' => $session_id));
+		global $config;
+		if (isset($_SESSION['id']))
+		{
+			unset($_SESSION['id']);
+		}
+		header("Location: {$config['url']}");
 	}
 }

@@ -11,26 +11,25 @@ if(!session_start()) {
 }
 
 /**
- * Including config file.
+ * Including config, functions and classes files.
  */ 
 require_once "config.php";
-require_once "includes.php";
+require_once "functions.php";
+require_once "classes/User.php";
+
+if (User::loggedIn())
+{
+	$user = new User($_SESSION['id']);
+}
 
 $error = "";
+include "content/header.php";
 if(isset($_GET['p']))
 {
 	$page = $_GET['p'];	
 	if($page)
 	{
-		$fileExists = $_SERVER['DOCUMENT_ROOT'] . '/pages/'.$page.".php";
-		if(file_exists($fileExists))
-		{
-			include("pages/".$page.".php");
-		} 
-		else 
-		{
-			 include("pages/404.php"); 
-		}
+		include("pages/".$page.".php");
 	} 
 	else 
 	{
@@ -41,3 +40,4 @@ else
 {
 	include("pages/index.php");
 }
+include "content/footer.php";
