@@ -8,6 +8,4 @@ if (!User::loggedIn())
 <a href="?p=logout">Uitloggen</a><br>
 Beste <?= $user->data("username") ?>,<br><br>
 
-Welkom op het ingelogde deel van dit LoginSysteem.<br><br>
-
-Powered by <a href="http://timdev.nu">TimDev</a>.
+Welkom op het ingelogde deel van dit LoginSysteem.

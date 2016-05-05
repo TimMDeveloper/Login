@@ -1,12 +1,12 @@
 <?php
 /**
  * Functions file
- * 
+ *
  * TimDev Login System
  * @author Tim M. <tim@timdev.nu>
  * @version 2.0
- * @copyright Copyright (c) 2016, Tim M. 
- */ 
+ * @copyright Copyright (c) 2016, Tim M.
+ */
 
 // Function to get the client IP address
 function getIP() {
