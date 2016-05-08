@@ -26,7 +26,7 @@ CREATE TABLE `users` (
   `ip_reg` varchar(255) DEFAULT NULL,
   `ip_last` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of users
