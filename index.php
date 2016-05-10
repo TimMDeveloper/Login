@@ -6,23 +6,27 @@
  * @copyright Copyright (c) 2016, Tim M.
  */
 
-if(!session_start()) {
-	session_start();
+if (session_status() == PHP_SESSION_NONE) 
+{
+    session_start();
 }
 
 /**
  * Including config, functions and classes files.
  */
-require_once "config.php";
-require_once "functions.php";
-require_once "classes/User.php";
+require_once 'config.php';
+require_once 'functions.php';
+require_once 'classes/User.php';
 
+/**
+ * Check of the user logged in is.
+ */ 
 if (User::loggedIn())
 {
 	$user = new User($_SESSION['id']);
 }
 
-$error = "";
+$error = null;
 include "content/header.php";
 if(isset($_GET['p']))
 {
@@ -30,15 +34,15 @@ if(isset($_GET['p']))
 	$allowedFiles = ['404', 'home', 'index', 'logout', 'register'];
 	if($page && in_array($page, $allowedFiles))
 	{
-		include("pages/".$page.".php");
+		include("pages/$page.php");
 	}
 	else
 	{
-		include("pages/index.php");
+		include('pages/index.php');
 	}
 }
 else
 {
-	include("pages/index.php");
+	include('pages/index.php');
 }
-include "content/footer.php";
+include 'content/footer.php';
