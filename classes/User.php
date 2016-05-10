@@ -39,7 +39,7 @@ class User {
 	 */
 	public function data($key)
 	{
-		if(isset($this->fields[$key]))
+		if(isset($this->fields[$key]) && $key !== 'password')
 		{
 			return $this->fields[$key];
 		}
@@ -51,14 +51,11 @@ class User {
 	 * @param string $username
 	 * @return mixed. User object|false
 	 */
-	public static function ByUsername($username)
+	public static function byUsername($username)
 	{
 		global $db;
-		$sql = "SELECT * FROM users WHERE username = :username";
-		$query = $db->prepare($sql);
-		$query->execute(array(
-			":username" => $username
-		));
+		$query = $db->prepare('SELECT * FROM users WHERE username = :username');
+		$query->execute([':username' => $username]);
 		if ($query->rowCount() == 1)
 		{
 			$getUserId = $query->fetch();
@@ -74,7 +71,7 @@ class User {
 	 */
 	public function login($password)
 	{
-		return (password_verify($password, $this->fields['password']));
+		return password_verify($password, $this->fields['password']);
 	}
 
 	/**
@@ -83,11 +80,7 @@ class User {
 	*/
 	public static function loggedIn()
 	{
-		if (isset($_SESSION['id']))
-		{
-			return true;
-		}
-		return false;
+		return isset($_SESSION['id']);
 	}
 
 	/**
@@ -103,10 +96,10 @@ class User {
 		header("Location: {$config['url']}");
 	}
 	/**
-	  *	@param string $username
-		* @param string $password
-		* @return array msg
-		*/
+	 * @param string $username
+	 * @param string $password
+	 * @return array msg
+	 */
 	public static function register($username, $password)
 	{
 		global $db, $config;
